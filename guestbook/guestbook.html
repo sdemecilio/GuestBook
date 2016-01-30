@@ -3,12 +3,28 @@
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
+	<h1>Welcome to my guestbook!</h1>
+	
+	{{>guestBook}}
+	
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name = "guestBook">
+	<form>
+		<div class = "form-group">
+			<label for = "guestName">Name: </label>
+			<input type = "text" name = "guestName" />
+		</div>
+		<div class = "form-group">
+			<label for = "guestBookMessage" style = "display:block">Message: </label>
+			<textarea name = "guestBookMessage" cols = "30" rows = "3" style = "display:block"></textarea>
+		</div>
+		<p>
+			<button type = "submit">Post Message</button>
+		</p>
+	</form>
+	
+	{{#each messages}}
+		<p><strong>{{ name }}</strong>: {{ message }} - {{ createdOn }}</p>
+	{{/each}}
 </template>
