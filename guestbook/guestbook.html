@@ -1,15 +1,15 @@
-<head>
-  <title>guestbook</title>
-</head>
 
-<body>
-	<h1>Welcome to my guestbook!</h1>
-	
-	{{>guestBook}}
-	
-</body>
+<template name = "layout"> <!-- name has to be layout -->
+	<body>
+		<h1>Welcome to my guestbook!</h1>
+		
+		{{> yield}}
+		
+	</body>
+</template>
 
 <template name = "guestBook">
+	<div class = 'col-xs-3'>
 	<form>
 		<div class = "form-group">
 			<label for = "guestName">Name: </label>
@@ -25,6 +25,16 @@
 	</form>
 	
 	{{#each messages}}
-		<p><strong>{{ name }}</strong>: {{ message }} - {{ createdOn }}</p>
+	<!-- creates the link for each message -->
+		<p><a href = "{{pathFor route = 'message.show'}}"><strong>{{ name }}</strong>: {{ message }} - {{ createdOn }}</a></p>
 	{{/each}}
+	</div>
+</template>
+
+<template name = "about">
+	<p>This is an app created for IT 328 in Meteor.</p>
+</template>
+
+<template name = "messages">
+	<p>{{name}}: {{message}}</p>
 </template>
