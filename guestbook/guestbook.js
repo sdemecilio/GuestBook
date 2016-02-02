@@ -1,5 +1,35 @@
 Messages = new Mongo.Collection('messages');
 
+Router.route('/', function () 
+{
+	this.render('guestBook'); // render guestbook template
+	this.layout('layout'); // set main layout template
+});
+
+Router.route('/about', function () 
+{
+	this.render('about');
+	this.layout('layout');
+});
+
+Router.route('/messages/:_id', function()
+// to get :_id, go to Console and type Messages.find({}).fetch()
+{
+	this.render('messages', 
+	{
+		data: function () 
+		{
+			return Messages.findOne({_id: this.params._id});
+		}
+	});
+	this.layout('layout');
+},
+// allows the messages to be clicked on in the main section, and brought up in localhost:3000/messages/....
+{
+	name: 'message.show'
+}
+);
+
 if (Meteor.isClient)
 {
 	Meteor.subscribe("messages");
