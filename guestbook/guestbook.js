@@ -43,10 +43,14 @@ if (Meteor.isClient)
 			event.preventDefault();
 			var messageBox = $(event.target).find('textarea[name=guestBookMessage]');
 			var messageText = messageBox.val();
-			var nameBox = $(event.target).find('input[name=guestName]');
+			//var nameBox = $(event.target).find('input[name=guestName]');
 			var name = nameBox.val();
 			
-			Messages.insert({message: messageText, name: name, createdOn: Date.now()});
+			Messages.insert({message: messageText, name: Meteor.user().username, createdOn: Date.now()});
+			
+			// clear field after submission
+			messageBox.val('');
+			//nameBox.val('');
 		}
 	});
 	
@@ -56,10 +60,52 @@ if (Meteor.isClient)
 			return Messages.find({}, {sort: {createdOn: -1}}) || {};
 		}
 	});
+	
+	Accouts.ui.config
+	({
+		passwordsSIgnupFields: "USERNAME_ONLY"
+	})
 }
 
 if (Meteor.isServer)
 {
+	Meteor.startup(function ()
+	{
+		smtp = 
+		{
+			username: 'yourmail@mail.com',
+			password: 'mySecretPassword',
+			server: 'smtp.gmail.com',
+			//port 580
+		};
+	});
+	
+	Accounts.onCreateUser(function(options, user)
+	{
+		if (options.profile)
+		{
+			user.profile = options.profile;
+		}
+		else
+		{
+			user.profile = {};
+		}
+		
+		// default properties
+		user.profile.rank = "1";
+		user.profile.experience = 0;
+		
+		// send verification email
+		if (options.email)
+		{
+			Accounts.emailTemplates.siteName = "Guestbook";
+			Accounts.emailTemplates.from = 'Stacey';
+			Accounts.sendVerificationEmail(users._id);
+		}
+		
+		return user;
+	});
+	
 	// this code only runs on the server
 	Meteor.publish("messages", function()
 	{

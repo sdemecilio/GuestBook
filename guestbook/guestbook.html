@@ -1,20 +1,38 @@
 
 <template name = "layout"> <!-- name has to be layout -->
 	<body>
-		<h1>Welcome to my guestbook!</h1>
+		<div class = "navbar navbar-default" role = "navigation">
+			<div class = "navbar-header">
+				<a class = "navbar-brand" href = "#">Guestbook</a>
+				<button type = "button" class = "navbar-toggle collapsed" data-toggle = "collapase" data-target = ".navbar-collapse">
+					<span class = "sr-only">Toggle navigation</span>
+					<span class = "icon-bar"></span>
+					<span class = "icon-bar"></span>
+					<span class = "icon-bar"></span>
+				</button>
+			</div>
+			<div class = "navbar-collapse collapse">
+				<ul class = "nav navbar-nav navbar-right">
+					{{>loginButtons}}
+				</ul>
+			</div>
+		</div>
 		
-		{{> yield}}
+		{{> yield}} 
 		
 	</body>
 </template>
 
 <template name = "guestBook">
+	{{ #if currentUser}}
 	<div class = 'col-xs-3'>
 	<form>
+	<!--
 		<div class = "form-group">
 			<label for = "guestName">Name: </label>
 			<input type = "text" name = "guestName" />
 		</div>
+	-->
 		<div class = "form-group">
 			<label for = "guestBookMessage" style = "display:block">Message: </label>
 			<textarea name = "guestBookMessage" cols = "30" rows = "3" style = "display:block"></textarea>
@@ -29,6 +47,7 @@
 		<p><a href = "{{pathFor route = 'message.show'}}"><strong>{{ name }}</strong>: {{ message }} - {{ createdOn }}</a></p>
 	{{/each}}
 	</div>
+	{{ /if}}
 </template>
 
 <template name = "about">
